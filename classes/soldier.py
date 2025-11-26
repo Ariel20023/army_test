@@ -9,3 +9,29 @@ class Soldier:
         self.Placement_status = Placement_status
 
 
+    def get_name(self):
+        return f"{self.first_name} , { self.last_name}"
+
+
+    def get_acquaintance(self):
+        return self.Male_or_female_acquaintance
+
+
+    def get_city(self):
+        return self.city
+
+
+    def distance(self):
+        return self.Distance_from_base_in_km
+
+
+    def status(self):
+        return self.Placement_status
+
+
+
+
+
+
+
+

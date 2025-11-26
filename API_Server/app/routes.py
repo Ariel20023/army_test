@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException
-from .models import Item
-from .database import items_db
 from fastapi import UploadFile
 import csv
 import io
+from classes import soldier
+
 
 router = APIRouter()
 
-@router.post("/upload-csv")
-def upload_csv(file: UploadFile):
+@router.post("/assignWithCsv")
+def assignWithCsv(file: UploadFile):
 
     if file.content_type != "text/csv":
          return {"error": "File must be a CSV"}
@@ -33,55 +33,42 @@ def upload_csv(file: UploadFile):
     }
 
 
-#
-# @router.post("/upload-csv")
-# def soldier_by_distance(file: UploadFile):
-#     if file.content_type != "text/csv":
-#          return {"error": "File must be a CSV"}
-#
-#
-#
-#     content = file.file.read().decode("utf-8")
-#
-#     reader = csv.reader(io.StringIO(content))
-#     header = next(reader)
-#     rows = list(reader)
-#
-#     for line in rows:
-#         if
-#             print(line)
-#
-#
+@router.post("/get_name_by_km-csv")
+def select_by_km(file: UploadFile):
+    if file.content_type != "text/csv":
+         return {"error": "File must be a CSV"}
+
+    content = file.file.read().decode("utf-8")
+
+    reader = csv.reader(io.StringIO(content))
+    header = next(reader)
+    rows = list(reader)
+    distant_soldiers = []
+    sleeping_places = 160
+    n = len(rows)
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if int(rows[j][5]) < int(rows[j + 1][5]):
+                rows[j], rows[j + 1] = rows[j + 1], rows[j]
+    for place in range(sleeping_places):
+        distant_soldiers.append(rows[place])
+    return distant_soldiers
 
 
 
-# @router.get("/items")
-# def get_items():
-#     return list(items_db.values())
-#
-# @router.get("/items/{item_id}")
-# def get_item(item_id: int):
-#     if item_id not in items_db:
-#         raise HTTPException(status_code=404, detail="Item not found")
-#     return items_db[item_id]
-#
-# @router.post("/items")
-# def create_item(item: Item):
-#     if item.id in items_db:
-#         raise HTTPException(status_code=400, detail="ID already exists")
-#     items_db[item.id] = item
-#     return {"message": "Item created", "item": item}
-#
-# @router.put("/items/{item_id}")
-# def update_item(item_id: int, item: Item):
-#     if item_id not in items_db:
-#         raise HTTPException(status_code=404, detail="Item not found")
-#     items_db[item_id] = item
-#     return {"message": "Item updated", "item": item}
-#
-# @router.delete("/items/{item_id}")
-# def delete_item(item_id: int):
-#     if item_id not in items_db:
-#         raise HTTPException(status_code=404, detail="Item not found")
-#     del items_db[item_id]
-#     return {"message": "Item deleted"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
